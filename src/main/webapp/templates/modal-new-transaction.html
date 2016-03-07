@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>New Transaction Modal</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+        <div class="modal-header">
+            <button type="button" class="close" aria-label="Close" ng-click="cancel()"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="gridSystemModalLabel">New Transaction</h4>
+        </div>
+        <div class="modal-body">
+            <form class="form-horizontal">
+                <div class="form-group">
+                    <label for="selectAccount" class="col-sm-2 control-label">Account</label>
+                    <div class="col-sm-10">
+                        <select id="selectAccount" class="form-control" ng-model="transaction.account"
+                            ng-options="account as account.name for account in accounts">
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="transactioneffdate" class="col-sm-2 control-label">Effective Date</label>
+                    <div class="col-sm-5">
+                        <p class="input-group">
+                            <input type="text" class="form-control" uib-datepicker-popup="{{format}}" ng-model="transaction.effdate" is-open="popup1.opened" datepicker-options="dateOptions" ng-required="true" close-text="Close" />
+                            <span class="input-group-btn">
+                                <button type="button" class="btn btn-default" ng-click="open1()"><i class="glyphicon glyphicon-calendar"></i></button>
+                            </span>
+                        </p>
+                    </div>
+                    <div class="col-sm-5">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="inputAmount" class="col-sm-2 control-label">Amount</label>
+                    <div class="col-sm-10">
+                        <div class="input-group">
+                            <span class="input-group-addon">$</span>
+                            <input type="text" class="form-control" id="inputAmount" placeholder="Amount" ng-model="transaction.amount">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="inputVendor" class="col-sm-2 control-label">Vendor</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="inputVendor" placeholder="Vendor" ng-model="transaction.vendor">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="inputFor" class="col-sm-2 control-label">For</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="inputFor" placeholder="For" ng-model="transaction.description">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="selectCategory" class="col-sm-2 control-label">Category</label>
+                    <div class="col-sm-10">
+                        <select id="selectCategory" class="form-control" ng-model="transaction.category"
+                            ng-options="category as category.name for category in categories">
+                        </select>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default" ng-click="save()">Save</button>
+            <button type="button" class="btn btn-primary" ng-click="cancel()">Close</button>
+        </div>
+    </body>
+</html>

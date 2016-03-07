@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Finance</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="lib/bootstrap/css/bootstrap.min.css">
+        <link rel="stylesheet" href="css/ngToast.min.css">
+        <link rel="stylesheet" href="css/style.css">
+        <script src="lib/jquery-1.11.3.min.js"></script>
+        <script src="lib/angularjs/angular.js"></script>
+        <script src="lib/angularjs/angular-route.min.js"></script>
+        <script src="lib/angularjs/angular-sanitize.js"></script>
+        <script src="lib/ngToast.min.js"></script>
+        <script src="lib/papaparse.min.js"></script>
+        <script src="lib/bootstrap/js/bootstrap.min.js"></script>
+        <script src="lib/ui-bootstrap-tpls-0.14.0.js"></script>
+        <script src="lib/angular-drag-and-drop-lists.min.js"></script>
+        <script src="js/init-route.js"></script>
+        <script src="js/directives/filemodel.js"></script>
+        <script src="js/controllers/modalEditTransactionCtrl.js"></script>
+        <script src="js/controllers/modalNewEditCategoryCtrl.js"></script>
+        <script src="js/controllers/navCtrl.js"></script>
+        <script src="js/controllers/yearCtrl.js"></script>
+        <script src="js/controllers/monthCtrl.js"></script>
+        <script src="js/controllers/uploadCtrl.js"></script>
+        <script src="js/controllers/budgetCtrl.js"></script>
+        <script src="js/controllers/categoriesCtrl.js"></script>
+        <script src="js/controllers/miscCtrl.js"></script>
+    </head>
+    <body ng-app="app">
+        <toast></toast>
+        <nav class="navbar navbar-default navbar-fixed-top" data-ng-controller="NavController">
+            <div class="container">
+                <div class="navbar-header">
+                    <span class="navbar-brand">Finance</span>
+                </div>
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav">
+                        <li><a href="#/year/">Yearly</a></li>
+                        <li><a href="#/month/">Monthly</a></li>
+                        <li class="dropdown">
+                            <a href="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Transactions <span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                              <li><a href="#/upload/">Upload CSV</a></li>
+                              <li><a href="javascript:void(0)" ng-click="newTransaction()">Enter single transaction</a></li>
+                            </ul>
+                        </li>
+                        <li><a href="#/budget/">Budget</a></li>
+                        <li><a href="#/categories/">Categories</a></li>
+                        <li><a href="#/misc/">Misc</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <div ng-view></div>
+        <footer>&nbsp;</footer>
+    </body>
+</html>
+<!--
+The MIT License
+
+Copyright 2015 Nathan Neville.
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+-->

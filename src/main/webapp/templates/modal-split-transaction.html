@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<!--
+The MIT License
+
+Copyright 2016 Nathan Neville.
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+-->
+<html>
+    <head>
+        <title>Split Transaction Modal</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+        <div class="modal-header">
+            <h3 class="modal-title">Split Transaction</h3>
+        </div>
+        <form name="myform" novalidate>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-sm-3">
+                        <strong>Transaction Date</strong><br />
+                        {{transaction.transdate | date:'M/d/yyyy'}}
+                    </div>
+                    <div class="col-sm-2">
+                        <strong>Amount</strong><br />
+                        {{transaction.amount | currency}}
+                    </div>
+                    <div class="col-sm-5">
+                        <strong>Description</strong><br />
+                        {{transaction.vendor | limitTo:20}}
+                    </div>
+                    <div class="col-sm-2">
+                        <strong>Account</strong><br />
+                        {{transaction.account.name}}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12">&nbsp;</div>
+                </div>
+                <table class="table">
+                    <tr>
+                        <th>Amount</th>
+                        <th>For</th>
+                        <th>Category</th>
+                    </tr>
+                    <tr ng-repeat="transaction in splitTransactions">
+                        <td><input type="text" class="form-control" ng-model="transaction.amount" ng-currency /></td>
+                        <td><input type="text" class="form-control" ng-model="transaction.description" /></td>
+                        <td>
+                            <select id="categoryselect" class="form-control" ng-model="transaction.category"
+                                ng-options="category as category.name for category in categories">
+                            </select>
+                        </td>
+                    </tr>
+                </table>
+                <div class="row">
+                    <div class="col-xs-12">Split by taxes</div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-4">
+                        Rate: <select id="rateselect" class="form-control" ng-model="selectedTaxRate"
+                                ng-options="rate as rate.label for rate in taxRates">
+                            </select>
+                    </div>
+                    <div class="col-xs-4">
+                        Tax Amount:
+                        <input type="text" class="form-control" ng-model="calculatedTaxAmount.taxAmount" ng-currency />
+                    </div>
+                    <div class="col-xs-4">
+                        Calculated Amount:
+                        <input type="text" class="form-control" ng-model="calculatedTaxAmount.paymentAmount" readonly="readonly" />
+                    </div>
+                </div>
+            </div>
+        </form>
+        <div class="modal-footer">
+            <button class="btn btn-primary" type="button" ng-click="ok()">Save</button>
+            <button class="btn btn-warning" type="button" ng-click="cancel()">Cancel</button>
+        </div>
+    </body>
+</html>

@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated Nov 29, 2015 12:39:27 PM by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="finance.entity.Transaction" table="transaction" catalog="finance" optimistic-lock="version">
+        <id name="uid" type="java.lang.Integer">
+            <column name="uid" />
+            <generator class="identity" />
+        </id>
+        <property name="effdate" type="date">
+            <column name="effdate" length="10" not-null="true" />
+        </property>
+        <property name="postdate" type="date">
+            <column name="postdate" length="10" not-null="true" />
+        </property>
+        <property name="transdate" type="date">
+            <column name="transdate" length="10" not-null="true" />
+        </property>
+        <property name="amount" type="big_decimal">
+            <column name="amount" precision="10" not-null="true" />
+        </property>
+        <property name="vendor" type="string">
+            <column name="vendor" not-null="true" />
+        </property>
+        <property name="description" type="string">
+            <column name="description" not-null="true" />
+        </property>
+        <property name="deleted" type="boolean">
+            <column name="deleted" not-null="true" />
+        </property>
+        <property name="splitId" type="int">
+            <column name="split_id" not-null="true" />
+        </property>
+        <many-to-one name="account" class="finance.entity.Account" fetch="select" lazy="false">
+            <column name="account_id" />
+        </many-to-one>
+        <many-to-one name="category" class="finance.entity.Category" fetch="select" lazy="false">
+            <column name="category_id" not-null="true" />
+        </many-to-one>
+        <!--<property name="accountId" type="int">
+            <column name="account_id" not-null="true" />
+        </property>
+        <property name="categoryId" type="int">
+            <column name="category_id" not-null="true" />
+        </property>-->
+    </class>
+</hibernate-mapping>

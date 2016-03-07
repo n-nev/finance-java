@@ -1,0 +1,121 @@
+<!--
+The MIT License
+
+Copyright 2015 Nathan Neville.
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+-->
+<section>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-12">
+                <form class="form-inline" style="margin-bottom: 1em;">
+                    <div class="form-group">
+                        <select class="form-control" ng-model="selectedYear"
+                            ng-options="year for year in transYears"
+                            ng-change="loadYear()">
+                        </select>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <table class="table table-bordered yearlyBudget">
+                    <colgroup>
+                        <col>
+                        <col ng-class="selectedMonth.val === 1 ? 'highlight' : ''">
+                        <col ng-class="selectedMonth.val === 2 ? 'highlight' : ''">
+                        <col ng-class="selectedMonth.val === 3 ? 'highlight' : ''">
+                        <col ng-class="selectedMonth.val === 4 ? 'highlight' : ''">
+                        <col ng-class="selectedMonth.val === 5 ? 'highlight' : ''">
+                        <col ng-class="selectedMonth.val === 6 ? 'highlight' : ''">
+                        <col ng-class="selectedMonth.val === 7 ? 'highlight' : ''">
+                        <col ng-class="selectedMonth.val === 8 ? 'highlight' : ''">
+                        <col ng-class="selectedMonth.val === 9 ? 'highlight' : ''">
+                        <col ng-class="selectedMonth.val === 10 ? 'highlight' : ''">
+                        <col ng-class="selectedMonth.val === 11 ? 'highlight' : ''">
+                        <col ng-class="selectedMonth.val === 12 ? 'highlight' : ''">
+                        <col>
+                        <col>
+                        <col>
+                    </colgroup>
+                    <tr>
+                        <th>Category</th>
+                        <th>Jan</th>
+                        <th>Feb</th>
+                        <th>Mar</th>
+                        <th>Apr</th>
+                        <th>May</th>
+                        <th>Jun</th>
+                        <th>Jul</th>
+                        <th>Aug</th>
+                        <th>Sep</th>
+                        <th>Oct</th>
+                        <th>Nov</th>
+                        <th>Dec</th>
+                        <th>Budgeted</th>
+                        <th>Remain <select ng-model="selectedMonth"
+                                ng-options="month as month.key for month in months"
+                                ng-change="budgetMonth()">
+                            </select>
+                        </th>
+                        <th>Category</th>
+                    </tr>
+                    <tr ng-repeat="category in ::categories | orderBy: sortId | filter: {extra : false} : true">
+                        <td>{{category.name}}</td>
+                        <td><span ng-repeat="month in yearlyTransactions | filter: {monthId: 1} : true"><span ng-repeat="cat in month.categories | filter: {uid: category.uid} : true">{{cat.amount | currency}}</span></span></td>
+                        <td><span ng-repeat="month in yearlyTransactions | filter: {monthId: 2} : true"><span ng-repeat="cat in month.categories | filter: {uid: category.uid} : true">{{cat.amount | currency}}</span></span></td>
+                        <td><span ng-repeat="month in yearlyTransactions | filter: {monthId: 3} : true"><span ng-repeat="cat in month.categories | filter: {uid: category.uid} : true">{{cat.amount | currency}}</span></span></td>
+                        <td><span ng-repeat="month in yearlyTransactions | filter: {monthId: 4} : true"><span ng-repeat="cat in month.categories | filter: {uid: category.uid} : true">{{cat.amount | currency}}</span></span></td>
+                        <td><span ng-repeat="month in yearlyTransactions | filter: {monthId: 5} : true"><span ng-repeat="cat in month.categories | filter: {uid: category.uid} : true">{{cat.amount | currency}}</span></span></td>
+                        <td><span ng-repeat="month in yearlyTransactions | filter: {monthId: 6} : true"><span ng-repeat="cat in month.categories | filter: {uid: category.uid} : true">{{cat.amount | currency}}</span></span></td>
+                        <td><span ng-repeat="month in yearlyTransactions | filter: {monthId: 7} : true"><span ng-repeat="cat in month.categories | filter: {uid: category.uid} : true">{{cat.amount | currency}}</span></span></td>
+                        <td><span ng-repeat="month in yearlyTransactions | filter: {monthId: 8} : true"><span ng-repeat="cat in month.categories | filter: {uid: category.uid} : true">{{cat.amount | currency}}</span></span></td>
+                        <td><span ng-repeat="month in yearlyTransactions | filter: {monthId: 9} : true"><span ng-repeat="cat in month.categories | filter: {uid: category.uid} : true">{{cat.amount | currency}}</span></span></td>
+                        <td><span ng-repeat="month in yearlyTransactions | filter: {monthId: 10} : true"><span ng-repeat="cat in month.categories | filter: {uid: category.uid} : true">{{cat.amount | currency}}</span></span></td>
+                        <td><span ng-repeat="month in yearlyTransactions | filter: {monthId: 11} : true"><span ng-repeat="cat in month.categories | filter: {uid: category.uid} : true">{{cat.amount | currency}}</span></span></td>
+                        <td><span ng-repeat="month in yearlyTransactions | filter: {monthId: 12} : true"><span ng-repeat="cat in month.categories | filter: {uid: category.uid} : true">{{cat.amount | currency}}</span></span></td>
+                        <td><span ng-repeat="budgetcat in budget.budgetCategory"><span ng-if="budgetcat.categoryId === category.uid">{{budgetcat.amount | currency}}</span></span></td>
+                        <td><span ng-repeat="diff in budgetDifference"><span ng-if="diff.catid === category.uid">{{diff.difference | currency}}</span></span></td>
+                        <td>{{category.name}}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Total</strong></td>
+                        <td><strong><span ng-bind="monthlyTotal(1) | currency"></span></strong></td>
+                        <td><strong><span ng-bind="monthlyTotal(2) | currency"></span></strong></td>
+                        <td><strong><span ng-bind="monthlyTotal(3) | currency"></span></strong></td>
+                        <td><strong><span ng-bind="monthlyTotal(4) | currency"></span></strong></td>
+                        <td><strong><span ng-bind="monthlyTotal(5) | currency"></span></strong></td>
+                        <td><strong><span ng-bind="monthlyTotal(6) | currency"></span></strong></td>
+                        <td><strong><span ng-bind="monthlyTotal(7) | currency"></span></strong></td>
+                        <td><strong><span ng-bind="monthlyTotal(8) | currency"></span></strong></td>
+                        <td><strong><span ng-bind="monthlyTotal(9) | currency"></span></strong></td>
+                        <td><strong><span ng-bind="monthlyTotal(10) | currency"></span></strong></td>
+                        <td><strong><span ng-bind="monthlyTotal(11) | currency"></span></strong></td>
+                        <td><strong><span ng-bind="monthlyTotal(12) | currency"></span></strong></td>
+                        <td><strong ng-bind="budgetTotal | currency"></strong></td>
+                        <td><strong ng-bind="currentRemaining | currency"></strong></td>
+                        <td><strong>Total</strong></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</section>

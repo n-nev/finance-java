@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<!--
+The MIT License
+
+Copyright 2016 Nathan Neville.
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+-->
+<html>
+    <head>
+        <title>Edit Transaction Modal</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+        <div class="modal-header">
+            <h3 class="modal-title">Edit Transaction</h3>
+        </div>
+        <form name="myform" class="form-horizontal" novalidate>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-sm-3">
+                        <strong>Transaction Date</strong><br />
+                        {{transaction.transdate | date:'M/d/yyyy'}}
+                    </div>
+                    <div class="col-sm-2">
+                        <strong>Amount</strong><br />
+                        {{transaction.amount | currency}}
+                    </div>
+                    <div class="col-sm-5">
+                        <strong>Description</strong><br />
+                        {{transaction.vendor | limitTo:20}}
+                    </div>
+                    <div class="col-sm-2">
+                        <strong>Account</strong><br />
+                        {{transaction.account.name}}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12">&nbsp;</div>
+                </div>
+                <div class="form-group">
+                    <label for="transactioneffdate" class="col-sm-3 control-label">Effective Date</label>
+                    <div class="col-sm-5">
+                        <p class="input-group">
+                            <input type="text" class="form-control" uib-datepicker-popup="{{format}}" ng-model="transaction.effdate" is-open="popup1.opened" datepicker-options="dateOptions" ng-required="true" close-text="Close" />
+                            <span class="input-group-btn">
+                                <button type="button" class="btn btn-default" ng-click="open1()"><i class="glyphicon glyphicon-calendar"></i></button>
+                            </span>
+                        </p>
+                    </div>
+                    <div class="col-sm-4">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="transactiondesc" class="col-sm-3 control-label">For</label>
+                    <div class="col-sm-5">
+                        <input type="text" class="form-control" ng-model="transaction.description" />
+                    </div>
+                    <div class="col-sm-4">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="categoryselect" class="col-sm-3 control-label">Category</label>
+                    <div class="col-sm-5">
+                        <select id="categoryselect" class="form-control" ng-model="transaction.category"
+                            ng-options="category as category.name for category in categories"
+                            ng-init="init()">
+                        </select>
+                    </div>
+                    <div class="col-sm-4">
+                    </div>
+                </div>
+            </div>
+        </form>
+        <div class="modal-footer">
+            <button class="btn btn-primary" type="button" ng-click="save()">Save</button>
+            <button class="btn btn-info" type="button" ng-click="split()" ng-disabled="transaction.splitId > 0">Split</button>
+            <button class="btn btn-warning" type="button" ng-click="cancel()">Cancel</button>
+        </div>
+    </body>
+</html>

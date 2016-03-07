@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC "-//Hibernate/Hibernate Configuration DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+  <session-factory>
+    <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
+    <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
+    <property name="hibernate.connection.datasource">java:comp/env/jdbc/MySQLFinance</property>
+    <property name="hibernate.show_sql">false</property>
+    <property name="hibernate.current_session_context_class">thread</property>
+    <property name="hibernate.query.factory_class">org.hibernate.hql.internal.classic.ClassicQueryTranslatorFactory</property>
+    <mapping resource="finance/entity/Transaction.hbm.xml"/>
+    <mapping resource="finance/entity/Budget.hbm.xml"/>
+    <mapping resource="finance/entity/Category.hbm.xml"/>
+    <mapping resource="finance/entity/BudgetCategory.hbm.xml"/>
+    <mapping resource="finance/entity/Account.hbm.xml"/>
+    <mapping resource="finance/entity/AccountSetting.hbm.xml"/>
+  </session-factory>
+</hibernate-configuration>

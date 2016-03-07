@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated Nov 29, 2015 12:39:27 PM by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="finance.entity.BudgetCategory" table="budget_category" catalog="finance" optimistic-lock="version">
+        <id name="uid" type="java.lang.Integer">
+            <column name="uid" />
+            <generator class="identity" />
+        </id>
+        <property name="budgetId" type="int">
+            <column name="budget_id" not-null="true" />
+        </property>
+        <property name="categoryId" type="int">
+            <column name="category_id" not-null="true" />
+        </property>
+        <property name="amount" type="big_decimal">
+            <column name="amount" precision="10" not-null="true" />
+        </property>
+        <!--<many-to-one name="budget" class="finance.entity.Budget" fetch="select">
+            <column name="budget_id" not-null="true" />
+        </many-to-one>-->
+    </class>
+</hibernate-mapping>
