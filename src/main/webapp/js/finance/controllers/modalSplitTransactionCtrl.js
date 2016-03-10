@@ -28,8 +28,11 @@ angular.module("app").controller('SplitTransaction', ['$scope', '$modalInstance'
     $scope.transaction = transaction;
     $scope.transaction.deleted = true;
     $scope.categories = categories;
-    
-    $scope.taxRates = [
+    $scope.model = {};
+    $scope.model.taxes = false;
+    $scope.model.taxAmount = 0;
+    $scope.model.taxSplitAmount = 0;
+    $scope.model.taxRates = [
         {
             label: '6.85%',
             rate: .0685
@@ -38,11 +41,17 @@ angular.module("app").controller('SplitTransaction', ['$scope', '$modalInstance'
             rate: .03
         }
     ];
-    $scope.selectedTaxRate = $scope.taxRates[0];
-    $scope.calculatedTaxAmount = {
-        taxAmount: 0,
-        paymentAmount: 0
-    };
+    $scope.model.selectedTaxRate = $scope.model.taxRates[0];
+    
+    $scope.calculateTax = function() {
+        if ($scope.model.taxAmount) {
+            $scope.model.taxSplitAmount = ($scope.model.taxAmount / $scope.model.selectedTaxRate.rate) + $scope.model.taxAmount;
+            $scope.splitTransactions[0].amount = $scope.model.taxSplitAmount;
+            $scope.splitTransactions[1].amount = $scope.transaction.amount - $scope.model.taxSplitAmount;
+        }
+    }
+    
+    $scope.$watch('model.taxAmount', $scope.calculateTax);
     
     $scope.splitTransactions = [
         {
@@ -50,7 +59,7 @@ angular.module("app").controller('SplitTransaction', ['$scope', '$modalInstance'
             "amount": transaction.amount,
             "category": transaction.category,
             "deleted": false,
-            "description": "",
+            "description": transaction.description,
             "effdate": transaction.effdate,
             "postdate": transaction.postdate,
             "splitId": transaction.uid,
@@ -62,7 +71,7 @@ angular.module("app").controller('SplitTransaction', ['$scope', '$modalInstance'
             "amount": 0,
             "category": transaction.category,
             "deleted": false,
-            "description": "",
+            "description": transaction.description,
             "effdate": transaction.effdate,
             "postdate": transaction.postdate,
             "splitId": transaction.uid,

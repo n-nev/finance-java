@@ -32,8 +32,8 @@ angular.module('app').service('transactionService', ['$http', function($http) {
         return $http.get('webapi/transactions/extra?startdate='+startDate+'&enddate='+endDate)
     };
     
-    this.addTransaction = function(transaction) {
-        return $http.post('webapi/transactions', transaction)
+    this.addTransaction = function(transactions) {
+        return $http.post('webapi/transactions', transactions)
     };
     
     this.saveTransaction = function(transaction) {
