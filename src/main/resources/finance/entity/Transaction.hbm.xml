@@ -24,7 +24,7 @@
             <column name="vendor" not-null="true" />
         </property>
         <property name="description" type="string">
-            <column name="description" not-null="true" />
+            <column name="description" />
         </property>
         <property name="deleted" type="boolean">
             <column name="deleted" not-null="true" />
