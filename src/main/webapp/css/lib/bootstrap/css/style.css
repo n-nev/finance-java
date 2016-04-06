@@ -27,6 +27,10 @@ body {
 .extra {
     color: lightskyblue;
 }
+/* angular form validation */
+form .ng-invalid.ng-touched {
+    background-color:#ff9999;
+}
 /* for drag n drop */
 ul[dnd-list], ul[dnd-list] > li { 
     position: relative;
