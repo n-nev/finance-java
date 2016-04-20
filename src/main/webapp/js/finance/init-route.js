@@ -26,27 +26,33 @@ angular.module('app', ['ngRoute', 'ui.bootstrap', 'ngToast', 'ngSanitize', 'dndL
         $routeProvider
             .when('/year', {
                 templateUrl: 'templates/year.html',
-                controller: 'YearController'
+                controller: 'YearController',
+                controllerAs: 'vm'
             })
             .when('/month', {
                 templateUrl: 'templates/month.jsp',
-                controller: 'MonthController'
+                controller: 'MonthController',
+                controllerAs: 'vm'
             })
             .when('/upload', {
                 templateUrl: 'templates/upload.html',
-                controller: 'UploadController'
+                controller: 'UploadController',
+                controllerAs: 'vm'
             })
             .when('/budget', {
                 templateUrl: 'templates/budget.html',
-                controller: 'BudgetController'
+                controller: 'BudgetController',
+                controllerAs: 'vm'
             })
             .when('/categories', {
                 templateUrl: 'templates/categories.html',
-                controller: 'CategoriesController'
+                controller: 'CategoriesController',
+                controllerAs: 'vm'
             })
             .when('/misc', {
                 templateUrl: 'templates/misc.jsp',
-                controller: 'MiscController'
+                controller: 'MiscController',
+                controllerAs: 'vm'
             })
             .otherwise({
                 redirectTo: '/year'

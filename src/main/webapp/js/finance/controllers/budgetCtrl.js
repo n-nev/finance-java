@@ -22,29 +22,31 @@
  * THE SOFTWARE.
  */
 
-angular.module("app").controller("BudgetController", ['$scope', '$uibModal', 'ngToast', 'appSettings', 'budgetService', 
-    function ($scope, $uibModal, ngToast, appSettings, budgetService) {
+angular.module("app").controller("BudgetController", ['$uibModal', 'ngToast', 'appSettings', 'budgetService', 
+    function ($uibModal, ngToast, appSettings, budgetService) {
+        
+    var vm = this;
 
-    $scope.categories = appSettings.categories;
-    $scope.accountSettings = appSettings.accountSettings;
+    vm.categories = appSettings.categories;
+    vm.accountSettings = appSettings.accountSettings;
     var transStartDate = new Date(Date.parse(appSettings.transMinDate));
     var transStartYear = transStartDate.getFullYear();
     var transEndDate = new Date(Date.parse(appSettings.transMaxDate));
     var transEndYear = transEndDate.getFullYear();
-    $scope.transYears = [];
+    vm.transYears = [];
     while (transStartYear <= transEndYear) {
-        $scope.transYears.push(transStartYear);
+        vm.transYears.push(transStartYear);
         transStartYear += 1;
     }
     var currentDate = new Date();
-    $scope.selectedYear = currentDate.getFullYear();
+    vm.selectedYear = currentDate.getFullYear();
 
-    $scope.loadBudget = function() {
-        budgetService.getBudget($scope.selectedYear).then(function (result) {
-            $scope.budget = result.data;
-            $scope.model = [];
+    vm.loadBudget = function() {
+        budgetService.getBudget(vm.selectedYear).then(function (result) {
+            vm.budget = result.data;
+            vm.model = [];
             var amount;
-            angular.forEach($scope.categories, function(value) {
+            angular.forEach(vm.categories, function(value) {
                 if (!value.extra) {
                     amount = 0;
                     for(var i = 0; i < result.data.budgetCategory.length; i++) {
@@ -53,7 +55,7 @@ angular.module("app").controller("BudgetController", ['$scope', '$uibModal', 'ng
                             break;
                         }
                     }
-                    $scope.model.push({
+                    vm.model.push({
                         name: value.name,
                         uid: value.uid,
                         amount: amount
@@ -65,29 +67,29 @@ angular.module("app").controller("BudgetController", ['$scope', '$uibModal', 'ng
         });
     };
     
-    $scope.loadBudget();
+    vm.loadBudget();
     
-    $scope.save = function() {
+    vm.save = function() {
         var found;
-        angular.forEach($scope.model, function(value) {
+        angular.forEach(vm.model, function(value) {
             found = false;
-            for(var i = 0; i < $scope.budget.budgetCategory.length; i++) {
-                if ($scope.budget.budgetCategory[i].categoryId === value.uid) {
-                    $scope.budget.budgetCategory[i].amount = value.amount;
+            for(var i = 0; i < vm.budget.budgetCategory.length; i++) {
+                if (vm.budget.budgetCategory[i].categoryId === value.uid) {
+                    vm.budget.budgetCategory[i].amount = value.amount;
                     found = true;
                     break;
                 }
             }
             if (!found) {
-                $scope.budget.budgetCategory.push({
+                vm.budget.budgetCategory.push({
                     "amount": value.amount,
-                    "budgetId": $scope.budget.uid,
+                    "budgetId": vm.budget.uid,
                     "categoryId": value.uid
                 });
             }
         });
         
-        budgetService.saveBudget($scope.budget.budgetCategory).then(function (result) {
+        budgetService.saveBudget(vm.budget.budgetCategory).then(function (result) {
             ngToast.success({
                 content: 'Budget saved'
             });

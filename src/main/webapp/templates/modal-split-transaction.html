@@ -30,26 +30,27 @@ THE SOFTWARE.
     </head>
     <body>
         <div class="modal-header">
-            <h3 class="modal-title">Split Transaction</h3>
+            <button type="button" class="close" aria-label="Close" ng-click="vm.cancel()"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">Split Transaction</h3>
         </div>
         <form name="myform" novalidate>
             <div class="modal-body">
                 <div class="row">
                     <div class="col-sm-3">
                         <strong>Transaction Date</strong><br />
-                        {{transaction.transdate | date:'M/d/yyyy'}}
+                        {{vm.transaction.transdate | date:'M/d/yyyy'}}
                     </div>
                     <div class="col-sm-2">
                         <strong>Amount</strong><br />
-                        {{transaction.amount | currency}}
+                        {{vm.transaction.amount | currency}}
                     </div>
                     <div class="col-sm-5">
                         <strong>Description</strong><br />
-                        {{transaction.vendor | limitTo:20}}
+                        {{vm.transaction.vendor | limitTo:20}}
                     </div>
                     <div class="col-sm-2">
                         <strong>Account</strong><br />
-                        {{transaction.account.name}}
+                        {{vm.transaction.account.name}}
                     </div>
                 </div>
                 <div class="row">
@@ -61,12 +62,12 @@ THE SOFTWARE.
                         <th>For</th>
                         <th>Category</th>
                     </tr>
-                    <tr ng-repeat="transaction in splitTransactions">
+                    <tr ng-repeat="transaction in vm.splitTransactions">
                         <td><input type="text" class="form-control" ng-model="transaction.amount" ng-currency /></td>
                         <td><input type="text" class="form-control" ng-model="transaction.description" /></td>
                         <td>
                             <select id="categoryselect" class="form-control" ng-model="transaction.category"
-                                ng-options="category as category.name for category in categories">
+                                ng-options="category as category.name for category in vm.categories">
                             </select>
                         </td>
                     </tr>
@@ -74,31 +75,31 @@ THE SOFTWARE.
                 <div class="row">
                     <div class="col-xs-12">
                         <label>
-                            <input type="checkbox" ng-model="model.taxes" /> Split by taxes
+                            <input type="checkbox" ng-model="vm.model.taxes" /> Split by taxes
                         </label>
                     </div>
                 </div>
-                <div class="row" ng-if="model.taxes">
+                <div class="row" ng-if="vm.model.taxes">
                     <div class="col-xs-4">
-                        Rate: <select id="rateselect" class="form-control" ng-model="model.selectedTaxRate"
-                                ng-options="rate as rate.label for rate in model.taxRates"
-                                ng-change="calculateTax()">
+                        Rate: <select id="rateselect" class="form-control" ng-model="vm.model.selectedTaxRate"
+                                ng-options="rate as rate.label for rate in vm.model.taxRates"
+                                ng-change="vm.calculateTax()">
                             </select>
                     </div>
                     <div class="col-xs-4">
                         Tax Amount:
-                        <input type="text" class="form-control" ng-model="model.taxAmount" ng-currency />
+                        <input type="text" class="form-control" ng-model="vm.model.taxAmount" ng-currency />
                     </div>
                     <div class="col-xs-4">
                         Calculated Amount:<br />
-                        {{model.taxSplitAmount | currency}}
+                        {{vm.model.taxSplitAmount | currency}}
                     </div>
                 </div>
             </div>
         </form>
         <div class="modal-footer">
-            <button class="btn btn-primary" type="button" ng-click="ok()">Save</button>
-            <button class="btn btn-warning" type="button" ng-click="cancel()">Cancel</button>
+            <button class="btn btn-primary" type="button" ng-click="vm.save()">Save</button>
+            <button class="btn btn-warning" type="button" ng-click="vm.cancel()">Cancel</button>
         </div>
     </body>
 </html>

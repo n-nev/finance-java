@@ -22,10 +22,12 @@
  * THE SOFTWARE.
  */
 
-angular.module("app").controller("MonthController", ['$scope', '$uibModal', 'appSettings', 'transactionService',
-    function ($scope, $uibModal, appSettings, transactionService) {
+angular.module("app").controller("MonthController", ['$uibModal', 'appSettings', 'transactionService',
+    function ($uibModal, appSettings, transactionService) {
+        
+    var vm = this;
     
-    $scope.months = [
+    vm.months = [
         {key: "Jan", val: 1},
         {key: "Feb", val: 2},
         {key: "Mar", val: 3},
@@ -40,42 +42,42 @@ angular.module("app").controller("MonthController", ['$scope', '$uibModal', 'app
         {key: "Dec", val: 12}
     ];
     
-    $scope.accounts = appSettings.accounts;
-    $scope.categories = appSettings.categories;
-    $scope.accountSettings = appSettings.accountSettings;
+    vm.accounts = appSettings.accounts;
+    vm.categories = appSettings.categories;
+    vm.accountSettings = appSettings.accountSettings;
     var transStartDate = new Date(Date.parse(appSettings.transMinDate));
     var transStartYear = transStartDate.getFullYear();
     var transEndDate = new Date(Date.parse(appSettings.transMaxDate));
     var transEndYear = transEndDate.getFullYear();
-    $scope.transYears = [];
+    vm.transYears = [];
     while (transStartYear <= transEndYear) {
-        $scope.transYears.push(transStartYear);
+        vm.transYears.push(transStartYear);
         transStartYear += 1;
     }
     var currentDate = new Date();
-    $scope.selectedYear = currentDate.getFullYear();
-    for (var i = 0; i < $scope.months.length; i++) {
-        if ($scope.months[i].val === (currentDate.getMonth() +1)) {
-            $scope.selectedMonth = $scope.months[i];
+    vm.selectedYear = currentDate.getFullYear();
+    for (var i = 0; i < vm.months.length; i++) {
+        if (vm.months[i].val === (currentDate.getMonth() +1)) {
+            vm.selectedMonth = vm.months[i];
             break;
         }
     }
 
-    $scope.loadTransactions = function() {
-        var startDate = new Date($scope.selectedYear, ($scope.selectedMonth.val - 1), 1).toISOString().slice(0,10);
-        var endDate = new Date($scope.selectedYear, $scope.selectedMonth.val, 0).toISOString().slice(0,10);
+    vm.loadTransactions = function() {
+        var startDate = new Date(vm.selectedYear, (vm.selectedMonth.val - 1), 1).toISOString().slice(0,10);
+        var endDate = new Date(vm.selectedYear, vm.selectedMonth.val, 0).toISOString().slice(0,10);
         transactionService.getTransactions(startDate, endDate).then(function (result) {
-            $scope.transactions = result.data;
+            vm.transactions = result.data;
         }, function (result) {
             alert("There was a problem getting transactions: "+result.data);
         });
     };
     
-    $scope.loadTransactions();
+    vm.loadTransactions();
     
-    $scope.getTotal = function(categoryid) {
+    vm.getTotal = function(categoryid) {
         var sum = 0;
-        angular.forEach($scope.transactions, function(value){
+        angular.forEach(vm.transactions, function(value){
             if (value.category.uid === categoryid && value.deleted === false) {
                 sum += value.amount;
             }
@@ -83,45 +85,46 @@ angular.module("app").controller("MonthController", ['$scope', '$uibModal', 'app
         return sum;
     };
     
-    $scope.editTransaction = function (transaction) {
+    vm.editTransaction = function (transaction) {
         var modalInstance = $uibModal.open({
             templateUrl: 'templates/modal-edit-transaction.html',
             controller: 'EditTransaction',
+            controllerAs: 'vm',
             size: 'md',
             resolve: {
                 transaction: function () {
                     return angular.copy(transaction);
                 },
                 categories: function () {
-                    return $scope.categories;
+                    return vm.categories;
                 }
             }
         });
         modalInstance.result.then(function (transactions) {
             if (angular.isArray(transactions)) {
                 // array is result from split
-                if ($scope.transactions) {
+                if (vm.transactions) {
                     var found;
                     for(var i = 0; i < transactions.length; i++) {
                         found = false;
-                        for (var j = 0; j < $scope.transactions.length; j++) {
-                            if ($scope.transactions[j].uid === transactions[i].uid) {
-                                $scope.transactions[j] = transactions[i];
+                        for (var j = 0; j < vm.transactions.length; j++) {
+                            if (vm.transactions[j].uid === transactions[i].uid) {
+                                vm.transactions[j] = transactions[i];
                                 found = true;
                                 break;
                             }
                         }
                         if (!found) {
-                            $scope.transactions.push(transactions[i]);
+                            vm.transactions.push(transactions[i]);
                         }
                     }
                 }
             } else {
                 // non-array is result from edit
-                if ($scope.transactions) {
-                    for (var j = 0; j < $scope.transactions.length; j++) {
-                        if ($scope.transactions[j].uid === transactions.uid) {
-                            $scope.transactions[j] = transactions;
+                if (vm.transactions) {
+                    for (var j = 0; j < vm.transactions.length; j++) {
+                        if (vm.transactions[j].uid === transactions.uid) {
+                            vm.transactions[j] = transactions;
                             break;
                         }
                     }

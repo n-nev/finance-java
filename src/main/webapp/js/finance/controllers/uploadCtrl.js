@@ -22,52 +22,53 @@
  * THE SOFTWARE.
  */
 
-angular.module('app').controller('UploadController', ['$scope', '$http', 'ngToast', 'appSettings',
-    function($scope, $http, ngToast, appSettings){
+angular.module('app').controller('UploadController', ['ngToast', 'appSettings', 'transactionService', 
+    function(ngToast, appSettings, transactionService){
+        
+    var vm = this;
     
-    $scope.accounts = appSettings.accounts;
-    $scope.categories = appSettings.categories;
-    for (var i = 0; i < $scope.categories.length; i++) {
-        if ($scope.categories[i].extra === true) {
-            $scope.defaultCategory = $scope.categories[i];
+    vm.accounts = appSettings.accounts;
+    vm.categories = appSettings.categories;
+    for (var i = 0; i < vm.categories.length; i++) {
+        if (vm.categories[i].extra === true) {
+            vm.defaultCategory = vm.categories[i];
             break;
         }
     }
-    $scope.accountSettings = appSettings.accountSettings;
+    vm.accountSettings = appSettings.accountSettings;
     
-    $scope.transactions = [];
-    $scope.parsed = false;
+    vm.transactions = [];
+    vm.parsed = false;
     
-    $scope.save = function(){
-        $http.post('webapi/transactions', $scope.transactions
-            ).then(function (result) {
-                ngToast.success({
-                    content: 'Transactions saved'
-                });
-                $scope.transactions = [];
-                $scope.parsed = false;
-            }, function (result) {
-                ngToast.danger({
-                    content: 'There was a problem saving the records: ' + result.data
-                });
+    vm.save = function(){
+        transactionService.addTransaction(vm.transactions).then(function (result) {
+            ngToast.success({
+                content: 'Transactions saved'
             });
+            vm.transactions = [];
+            vm.parsed = false;
+        }, function (result) {
+            ngToast.danger({
+                content: 'There was a problem saving the records: ' + result.data
+            });
+        });
     };
     
-    $scope.uploadFile = function(){
-        var file = $scope.myFile;
+    vm.uploadFile = function(){
+        var file = vm.myFile;
         Papa.parse(file, {
             header: true,
             skipEmptyLines: true,
             delimiter: ",",
             comments: '<!--',
             complete: function(results) {
-                $scope.transactions = [];
-                $scope.selectedAccount = 0;
+                vm.transactions = [];
+                vm.selectedAccount = 0;
                 // figure out what account this is
                 var found = false;
                 loop1:
-                for (var j = 0; j < $scope.accountSettings.length; j++) {
-                    var fileHeader = $scope.accountSettings[j].fileHeader.split(',');
+                for (var j = 0; j < vm.accountSettings.length; j++) {
+                    var fileHeader = vm.accountSettings[j].fileHeader.split(',');
                     loop2:
                     for (var k = 0; k < fileHeader.length; k++) {
                         if (fileHeader[k] !== results.meta.fields[k].trim()) {
@@ -79,9 +80,9 @@ angular.module('app').controller('UploadController', ['$scope', '$http', 'ngToas
                     }
                     if (found === true) {
                         loop3:
-                        for (var m = 0; m < $scope.accounts.length; m++) {
-                            if ($scope.accountSettings[j].accountId === $scope.accounts[m].uid) {
-                                $scope.selectedAccount = $scope.accounts[m];
+                        for (var m = 0; m < vm.accounts.length; m++) {
+                            if (vm.accountSettings[j].accountId === vm.accounts[m].uid) {
+                                vm.selectedAccount = vm.accounts[m];
                                 break loop3;
                             }
                         }
@@ -89,7 +90,7 @@ angular.module('app').controller('UploadController', ['$scope', '$http', 'ngToas
                     }
                 }
                 
-                switch($scope.selectedAccount.uid) {
+                switch(vm.selectedAccount.uid) {
                     case 1:
                         for (var i = 0; i < results.data.length; i++) {
                             var dateArray = results.data[i]['Posted Date'].split('/');
@@ -106,7 +107,7 @@ angular.module('app').controller('UploadController', ['$scope', '$http', 'ngToas
                             if (results.data[i]['CR/DR'] === 'CR') {
                                 amount *= -1;
                             }
-                            $scope.transactions.push({
+                            vm.transactions.push({
                                 effdate: transDate,
                                 transdate: transDate,
                                 // TODO: parse actual trans date from description
@@ -114,8 +115,8 @@ angular.module('app').controller('UploadController', ['$scope', '$http', 'ngToas
                                 amount: amount,
                                 vendor: results.data[i]['Description'],
                                 description: null,
-                                account: $scope.selectedAccount,
-                                category: $scope.defaultCategory,
+                                account: vm.selectedAccount,
+                                category: vm.defaultCategory,
                                 deleted: false,
                                 split: false
                             });
@@ -148,15 +149,15 @@ angular.module('app').controller('UploadController', ['$scope', '$http', 'ngToas
                             }
                             var postDate = new Date(parseInt(dateYear),parseInt(dateMonth)-1,parseInt(dateDay));
 
-                            $scope.transactions.push({
+                            vm.transactions.push({
                                 effdate: transDate,
                                 transdate: transDate,
                                 postdate: postDate,
                                 amount: amt,
                                 vendor: results.data[i]['Description'],
                                 description: null,
-                                account: $scope.selectedAccount,
-                                category: $scope.defaultCategory,
+                                account: vm.selectedAccount,
+                                category: vm.defaultCategory,
                                 deleted: false,
                                 split: false
                             });
@@ -187,15 +188,15 @@ angular.module('app').controller('UploadController', ['$scope', '$http', 'ngToas
                                 var amt = parseFloat(results.data[i]['Amount']);
                                 amt *= -1;
                                 
-                                $scope.transactions.push({
+                                vm.transactions.push({
                                     effdate: transDate,
                                     transdate: transDate,
                                     postdate: postDate,
                                     amount: amt.toFixed(2),
                                     vendor: results.data[i]['Description'],
                                     description: null,
-                                    account: $scope.selectedAccount,
-                                    category: $scope.defaultCategory,
+                                    account: vm.selectedAccount,
+                                    category: vm.defaultCategory,
                                     deleted: false,
                                     split: false
                                 });
@@ -203,25 +204,24 @@ angular.module('app').controller('UploadController', ['$scope', '$http', 'ngToas
                         }
                         break;
                 }
-                $http.post('webapi/transactions/check', $scope.transactions
-                    ).then(function (result) {
-                        $scope.transactions = result.data;
-                        if ($scope.transactions.length) {
-                            $scope.parsed = true;
-                            for (var i = 0; i < $scope.transactions.length; i++)
-                            {
-                                $scope.transactions[i].category = $scope.defaultCategory;
-                            }
+                transactionService.checkTransactions(vm.transactions).then(function (result) {
+                    vm.transactions = result.data;
+                    if (vm.transactions.length) {
+                        vm.parsed = true;
+                        for (var i = 0; i < vm.transactions.length; i++)
+                        {
+                            vm.transactions[i].category = vm.defaultCategory;
                         }
-                        ngToast.success({
-                            content: 'Transactions checked'
-                        });
-                        
-                    }, function (result) {
-                        ngToast.danger({
-                            content: 'There was a problem checking the transactions: ' + result.data
-                        });
+                    }
+                    ngToast.success({
+                        content: 'Transactions checked'
                     });
+
+                }, function (result) {
+                    ngToast.danger({
+                        content: 'There was a problem checking the transactions: ' + result.data
+                    });
+                });
             }
         });
     };

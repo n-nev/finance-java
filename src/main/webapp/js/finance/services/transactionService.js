@@ -44,5 +44,9 @@ angular.module('app').service('transactionService', ['$http', function($http) {
         return $http.put('webapi/transactions/split', transactions);
     };
     
+    this.checkTransactions = function(transactions) {
+        return $http.post('webapi/transactions/check', transactions);
+    };
+    
     
 }]);

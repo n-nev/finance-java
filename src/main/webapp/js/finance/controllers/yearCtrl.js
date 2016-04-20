@@ -21,31 +21,33 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-angular.module("app").controller("YearController", ['$scope', '$uibModal', 'appSettings', 'budgetService', 'yearService',
-    function ($scope, $uibModal, appSettings, budgetService, yearService) {
+angular.module("app").controller("YearController", ['$uibModal', 'appSettings', 'budgetService', 'yearService',
+    function ($uibModal, appSettings, budgetService, yearService) {
+        
+    var vm = this;
     
-    $scope.transYears = [];
-    $scope.budget = {};
-    $scope.budgeted = [];
-    $scope.budgetDifference = [];
-    $scope.currentRemaining;
-    $scope.budgetTotal;
+    vm.transYears = [];
+    vm.budget = {};
+    vm.budgeted = [];
+    vm.budgetDifference = [];
+    vm.currentRemaining;
+    vm.budgetTotal;
     
-    $scope.accounts = appSettings.accounts;
-    $scope.categories = appSettings.categories;
-    $scope.accountSettings = appSettings.accountSettings;
+    vm.accounts = appSettings.accounts;
+    vm.categories = appSettings.categories;
+    vm.accountSettings = appSettings.accountSettings;
     var transStartDate = new Date(Date.parse(appSettings.transMinDate));
     var transStartYear = transStartDate.getFullYear();
     var transEndDate = new Date(Date.parse(appSettings.transMaxDate));
     var transEndYear = transEndDate.getFullYear();
     while (transStartYear <= transEndYear) {
-        $scope.transYears.push(transStartYear);
+        vm.transYears.push(transStartYear);
         transStartYear += 1;
     }
     var currentDate = new Date();
-    $scope.selectedYear = currentDate.getFullYear();
+    vm.selectedYear = currentDate.getFullYear();
     
-    $scope.months = [
+    vm.months = [
         {key: "Jan", val: 1},
         {key: "Feb", val: 2},
         {key: "Mar", val: 3},
@@ -61,47 +63,47 @@ angular.module("app").controller("YearController", ['$scope', '$uibModal', 'appS
     ];
     
     var currentDate = new Date();
-    $scope.selectedYear = currentDate.getFullYear();
+    vm.selectedYear = currentDate.getFullYear();
     
-    for (var i = 0; i < $scope.months.length; i++) {
-        if ($scope.months[i].val === (currentDate.getMonth() +1)) {
-            $scope.selectedMonth = $scope.months[i];
+    for (var i = 0; i < vm.months.length; i++) {
+        if (vm.months[i].val === (currentDate.getMonth() +1)) {
+            vm.selectedMonth = vm.months[i];
             break;
         }
     }
     
-    $scope.budgetMonth = function() {
-        $scope.currentRemaining = 0;
-        $scope.budgetDifference = [];
-        for (var i = 0; i < $scope.budgeted.length; i++) {
+    vm.budgetMonth = function() {
+        vm.currentRemaining = 0;
+        vm.budgetDifference = [];
+        for (var i = 0; i < vm.budgeted.length; i++) {
             var difference = 0;
-            for (var j = 0; j < $scope.yearlyTransactions.length; j++){
-                if ($scope.yearlyTransactions[j].monthId === $scope.selectedMonth.val) {
-                    for (var k = 0; k < $scope.yearlyTransactions[j].categories.length; k++){
-                        if ($scope.yearlyTransactions[j].categories[k].uid === $scope.budgeted[i].catid) {
-                            difference = $scope.budgeted[i].budgeted - $scope.yearlyTransactions[j].categories[k].amount;
+            for (var j = 0; j < vm.yearlyTransactions.length; j++){
+                if (vm.yearlyTransactions[j].monthId === vm.selectedMonth.val) {
+                    for (var k = 0; k < vm.yearlyTransactions[j].categories.length; k++){
+                        if (vm.yearlyTransactions[j].categories[k].uid === vm.budgeted[i].catid) {
+                            difference = vm.budgeted[i].budgeted - vm.yearlyTransactions[j].categories[k].amount;
                             break;
                         }
                     }
                     break;
                 }
             }
-            $scope.budgetDifference.push({
-                catid: $scope.budgeted[i].catid,
+            vm.budgetDifference.push({
+                catid: vm.budgeted[i].catid,
                 difference: difference
             });
-            $scope.currentRemaining += difference;
+            vm.currentRemaining += difference;
         }
     };
     
-    $scope.monthlyTotal = function(currentMonth) {
+    vm.monthlyTotal = function(currentMonth) {
         var total = 0;
-        if ($scope.yearlyTransactions !== undefined) {
-            for (var i = 0; i < $scope.yearlyTransactions.length; i++){
-                if ($scope.yearlyTransactions[i].monthId === currentMonth) {
-                    for (var j = 0; j < $scope.yearlyTransactions[i].categories.length; j++){
-                        if ($scope.yearlyTransactions[i].categories[j].extra === false) {
-                            total += $scope.yearlyTransactions[i].categories[j].amount;
+        if (vm.yearlyTransactions !== undefined) {
+            for (var i = 0; i < vm.yearlyTransactions.length; i++){
+                if (vm.yearlyTransactions[i].monthId === currentMonth) {
+                    for (var j = 0; j < vm.yearlyTransactions[i].categories.length; j++){
+                        if (vm.yearlyTransactions[i].categories[j].extra === false) {
+                            total += vm.yearlyTransactions[i].categories[j].amount;
                         }
                     }
                     break;
@@ -111,49 +113,49 @@ angular.module("app").controller("YearController", ['$scope', '$uibModal', 'appS
         return total;
     };
     
-    $scope.budgetTotalCalc = function() {
+    vm.budgetTotalCalc = function() {
         var total = 0;
-        if ($scope.budget !== undefined && $scope.categories !== undefined) {
-            for (var i = 0; i < $scope.budget.budgetCategory.length; i++){
-                for (var j = 0; j < $scope.categories.length; j++) {
-                    if ($scope.categories[j].uid === $scope.budget.budgetCategory[i].categoryId) {
-                        if ($scope.categories[j].extra === false) {
-                            total += $scope.budget.budgetCategory[i].amount;
+        if (vm.budget !== undefined && vm.categories !== undefined) {
+            for (var i = 0; i < vm.budget.budgetCategory.length; i++){
+                for (var j = 0; j < vm.categories.length; j++) {
+                    if (vm.categories[j].uid === vm.budget.budgetCategory[i].categoryId) {
+                        if (vm.categories[j].extra === false) {
+                            total += vm.budget.budgetCategory[i].amount;
                         }
                         break;
                     }
                 }
             }
         }
-        $scope.budgetTotal = total;
+        vm.budgetTotal = total;
     };
     
-    $scope.loadYear = function() {
-        yearService.getYear($scope.selectedYear).then(function (result) {
-            $scope.yearlyTransactions = result.data;
-            $scope.loadBudget();
+    vm.loadYear = function() {
+        yearService.getYear(vm.selectedYear).then(function (result) {
+            vm.yearlyTransactions = result.data;
+            vm.loadBudget();
         }, function (result) {
             alert("There was a problem getting the data: "+result.data);
         });
     };
     
-    $scope.loadBudget = function() {
-        budgetService.getBudget($scope.selectedYear).then(function (result) {
-            $scope.budget = result.data;
-            $scope.budgeted = [];
-            for (var i = 0; i < $scope.budget.budgetCategory.length; i++){
-                $scope.budgeted.push({
-                    catid: $scope.budget.budgetCategory[i].categoryId,
-                    budgeted: $scope.budget.budgetCategory[i].amount
+    vm.loadBudget = function() {
+        budgetService.getBudget(vm.selectedYear).then(function (result) {
+            vm.budget = result.data;
+            vm.budgeted = [];
+            for (var i = 0; i < vm.budget.budgetCategory.length; i++){
+                vm.budgeted.push({
+                    catid: vm.budget.budgetCategory[i].categoryId,
+                    budgeted: vm.budget.budgetCategory[i].amount
                 });
             }
-            $scope.budgetMonth();
-            $scope.budgetTotalCalc();
+            vm.budgetMonth();
+            vm.budgetTotalCalc();
         }, function (result) {
             alert("There was a problem getting transactions: "+result.data);
         });
     };
     
-    $scope.loadYear();
+    vm.loadYear();
 
 }]);

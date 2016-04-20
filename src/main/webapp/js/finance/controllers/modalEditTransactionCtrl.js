@@ -22,39 +22,41 @@
  * THE SOFTWARE.
  */
 
-angular.module("app").controller('EditTransaction', ['$scope', '$uibModal', '$modalInstance', 'transaction', 'categories', 'ngToast', 'transactionService', 
-    function ($scope, $uibModal, $modalInstance, transaction, categories, ngToast, transactionService) {
+angular.module("app").controller('EditTransaction', ['$uibModal', '$modalInstance', 'transaction', 'categories', 'ngToast', 'transactionService', 
+    function ($uibModal, $modalInstance, transaction, categories, ngToast, transactionService) {
+        
+    var vm = this;
     
-    $scope.transaction = transaction;
-    $scope.categories = categories;
+    vm.transaction = transaction;
+    vm.categories = categories;
     
     // calendar options
-    $scope.dateOptions = {
+    vm.dateOptions = {
         formatYear: 'yy',
-        startingDay: 1
+        startingDay: 0
     };
     
-    $scope.popup1 = {
+    vm.popup1 = {
         opened: false
     };
     
-    $scope.open1 = function() {
-        $scope.popup1.opened = true;
+    vm.open1 = function() {
+        vm.popup1.opened = true;
     };
     
-    $scope.format = 'M/d/yyyy';
+    vm.format = 'M/d/yyyy';
     
     // end calendar options
     
-    $scope.init = function() {
-        angular.forEach($scope.categories, function (item){
-            if (item.uid === $scope.transaction.category.uid) {
-                $scope.transaction.category = item;
+    vm.init = function() {
+        angular.forEach(vm.categories, function (item){
+            if (item.uid === vm.transaction.category.uid) {
+                vm.transaction.category = item;
             }
         });
     }
 
-    $scope.save = function () {
+    vm.save = function () {
         transactionService.saveTransaction(transaction).then(
             function (response) {
                 ngToast.success({
@@ -69,17 +71,18 @@ angular.module("app").controller('EditTransaction', ['$scope', '$uibModal', '$mo
         ));
     };
     
-    $scope.split = function (transaction) {
+    vm.split = function (transaction) {
         var modalInstance = $uibModal.open({
             templateUrl: 'templates/modal-split-transaction.html',
             controller: 'SplitTransaction',
+            controllerAs: 'vm',
             size: 'md',
             resolve: {
                 transaction: function () {
-                    return angular.copy($scope.transaction);
+                    return angular.copy(vm.transaction);
                 },
                 categories: function () {
-                    return $scope.categories;
+                    return vm.categories;
                 }
             }
         });
@@ -90,7 +93,7 @@ angular.module("app").controller('EditTransaction', ['$scope', '$uibModal', '$mo
         });
     };
     
-    $scope.cancel = function () {
+    vm.cancel = function () {
         $modalInstance.dismiss();
     };
 }]);

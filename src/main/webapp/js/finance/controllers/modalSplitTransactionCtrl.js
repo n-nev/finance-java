@@ -24,15 +24,17 @@
 
 angular.module("app").controller('SplitTransaction', ['$scope', '$modalInstance', 'transaction', 'categories', 'ngToast', 'transactionService',
     function ($scope, $modalInstance, transaction, categories, ngToast, transactionService) {
+        
+    var vm = this;
     
-    $scope.transaction = transaction;
-    $scope.transaction.deleted = true;
-    $scope.categories = categories;
-    $scope.model = {};
-    $scope.model.taxes = false;
-    $scope.model.taxAmount = 0;
-    $scope.model.taxSplitAmount = 0;
-    $scope.model.taxRates = [
+    vm.transaction = transaction;
+    vm.transaction.deleted = true;
+    vm.categories = categories;
+    vm.model = {};
+    vm.model.taxes = false;
+    vm.model.taxAmount = 0;
+    vm.model.taxSplitAmount = 0;
+    vm.model.taxRates = [
         {
             label: '6.85%',
             rate: .0685
@@ -41,19 +43,19 @@ angular.module("app").controller('SplitTransaction', ['$scope', '$modalInstance'
             rate: .03
         }
     ];
-    $scope.model.selectedTaxRate = $scope.model.taxRates[0];
+    vm.model.selectedTaxRate = vm.model.taxRates[0];
     
-    $scope.calculateTax = function() {
-        if ($scope.model.taxAmount) {
-            $scope.model.taxSplitAmount = ($scope.model.taxAmount / $scope.model.selectedTaxRate.rate) + $scope.model.taxAmount;
-            $scope.splitTransactions[0].amount = $scope.model.taxSplitAmount;
-            $scope.splitTransactions[1].amount = $scope.transaction.amount - $scope.model.taxSplitAmount;
+    vm.calculateTax = function() {
+        if (vm.model.taxAmount) {
+            vm.model.taxSplitAmount = (vm.model.taxAmount / vm.model.selectedTaxRate.rate) + vm.model.taxAmount;
+            vm.splitTransactions[0].amount = vm.model.taxSplitAmount;
+            vm.splitTransactions[1].amount = vm.transaction.amount - vm.model.taxSplitAmount;
         }
     }
     
-    $scope.$watch('model.taxAmount', $scope.calculateTax);
+    $scope.$watch('vm.model.taxAmount', vm.calculateTax);
     
-    $scope.splitTransactions = [
+    vm.splitTransactions = [
         {
             "account": transaction.account,
             "amount": transaction.amount,
@@ -80,18 +82,18 @@ angular.module("app").controller('SplitTransaction', ['$scope', '$modalInstance'
         }
     ];
     
-    angular.forEach($scope.splitTransactions, function (item){
-        for (var i = 0; i < $scope.categories.length; i++) {
-            if ($scope.categories[i].uid === item.category.uid) {
-                item.category = $scope.categories[i];
+    angular.forEach(vm.splitTransactions, function (item){
+        for (var i = 0; i < vm.categories.length; i++) {
+            if (vm.categories[i].uid === item.category.uid) {
+                item.category = vm.categories[i];
                 break;
             }
         }
     });
 
-    $scope.ok = function () {
-        var transactions = angular.copy($scope.splitTransactions);
-        transactions.push($scope.transaction);
+    vm.save = function () {
+        var transactions = angular.copy(vm.splitTransactions);
+        transactions.push(vm.transaction);
         transactionService.splitTransaction(transactions).then(function (response) {
                 ngToast.success({
                     content: 'Transaction saved'
@@ -104,7 +106,7 @@ angular.module("app").controller('SplitTransaction', ['$scope', '$modalInstance'
             });
     };
     
-    $scope.cancel = function () {
+    vm.cancel = function () {
         $modalInstance.dismiss();
     };
 }]);

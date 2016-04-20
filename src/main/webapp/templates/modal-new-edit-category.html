@@ -23,21 +23,22 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 -->
 <div class="modal-header">
-    <h3 class="modal-title">{{mode}} Category</h3>
+    <button type="button" class="close" aria-label="Close" ng-click="vm.cancel()"><span aria-hidden="true">&times;</span></button>
+    <h4 class="modal-title">{{vm.mode}} Category</h4>
 </div>
 <form name="myform" class="form-horizontal" novalidate>
     <div class="modal-body">
         <div class="form-group">
             <label for="name" class="col-sm-3 control-label">Name</label>
             <div class="col-sm-9">
-                <input type="text" class="form-control" ng-model="category.name" />
+                <input type="text" class="form-control" ng-model="vm.category.name" />
             </div>
         </div>
         <div class="form-group">
             <div class="col-sm-offset-3 col-sm-9">
                 <div class="checkbox">
                     <label>
-                        <input type="checkbox" ng-model="category.extra" /> Misc Category
+                        <input type="checkbox" ng-model="vm.category.extra" /> Misc Category
                     </label>
                 </div>
             </div>
@@ -45,6 +46,6 @@ THE SOFTWARE.
     </div>
 </form>
 <div class="modal-footer">
-    <button class="btn btn-primary" type="button" ng-click="ok()">Save</button>
-    <button class="btn btn-warning" type="button" ng-click="cancel()">Cancel</button>
+    <button class="btn btn-primary" type="button" ng-click="vm.save()">Save</button>
+    <button class="btn btn-warning" type="button" ng-click="vm.cancel()">Cancel</button>
 </div>

@@ -22,15 +22,18 @@
  * THE SOFTWARE.
  */
 
-angular.module("app").controller("CategoriesController", ['$scope', '$uibModal', 'ngToast', 'appSettings', 'categoryService',
-    function ($scope, $uibModal, ngToast, appSettings, categoryService) {
+angular.module("app").controller("CategoriesController", ['$uibModal', 'ngToast', 'appSettings', 'categoryService',
+    function ($uibModal, ngToast, appSettings, categoryService) {
+        
+    var vm = this;
     
-    $scope.categories = appSettings.categories;
+    vm.categories = appSettings.categories;
 
-    $scope.newCategory = function () {
+    vm.newCategory = function () {
         var modalInstance = $uibModal.open({
             templateUrl: 'templates/modal-new-edit-category.html',
             controller: 'NewEditCategory',
+            controllerAs: 'vm',
             size: 'sm',
             resolve: {
                 category: function () {
@@ -39,14 +42,15 @@ angular.module("app").controller("CategoriesController", ['$scope', '$uibModal',
             }
         });
         modalInstance.result.then(function (category) {
-            $scope.categories.push(category);
+            vm.categories.push(category);
         });
     };
     
-    $scope.editCategory = function (category) {
+    vm.editCategory = function (category) {
         var modalInstance = $uibModal.open({
             templateUrl: 'templates/modal-new-edit-category.html',
             controller: 'NewEditCategory',
+            controllerAs: 'vm',
             size: 'sm',
             resolve: {
                 category: function () {
@@ -55,10 +59,10 @@ angular.module("app").controller("CategoriesController", ['$scope', '$uibModal',
             }
         });
         modalInstance.result.then(function (category) {
-            if ($scope.categories) {
-                for (var i = 0; i < $scope.categories.length; i++) {
-                    if ($scope.categories[i].uid === category.uid) {
-                        $scope.categories[i] = category;
+            if (vm.categories) {
+                for (var i = 0; i < vm.categories.length; i++) {
+                    if (vm.categories[i].uid === category.uid) {
+                        vm.categories[i] = category;
                         break;
                     }
                 }
@@ -66,13 +70,13 @@ angular.module("app").controller("CategoriesController", ['$scope', '$uibModal',
         });
     };
     
-    $scope.save = function() {
+    vm.save = function() {
         // reorder the categories
-        var catCount = $scope.categories.length;
+        var catCount = vm.categories.length;
         for (var i = 0; i < catCount; i++) {
-            $scope.categories[i].sortId = i + 1;
+            vm.categories[i].sortId = i + 1;
         }
-        categoryService.saveCategories($scope.categories).then(function (result) {
+        categoryService.saveCategories(vm.categories).then(function (result) {
             ngToast.success({
                 content: 'Categories saved'
             });

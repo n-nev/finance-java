@@ -21,31 +21,33 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-angular.module("app").controller('NewTransaction', ['$scope', '$modalInstance', 'ngToast', 'appSettings', 'transactionService', 
-    function ($scope, $modalInstance, ngToast, appSettings, transactionService) {
+angular.module("app").controller('NewTransaction', ['$modalInstance', 'ngToast', 'appSettings', 'transactionService', 
+    function ($modalInstance, ngToast, appSettings, transactionService) {
+        
+    var vm = this;
     
-    $scope.transaction = {
+    vm.transaction = {
         effdate: new Date()
     };
 
-    $scope.accounts = appSettings.accounts;
-    $scope.categories = appSettings.categories;
-    $scope.accountSettings = appSettings.accountSettings;
-    $scope.transaction.category = $scope.categories[0];
-    $scope.transaction.account = $scope.accounts[0];
+    vm.accounts = appSettings.accounts;
+    vm.categories = appSettings.categories;
+    vm.accountSettings = appSettings.accountSettings;
+    vm.transaction.category = vm.categories[0];
+    vm.transaction.account = vm.accounts[0];
     
-    $scope.save = function(){
-        $scope.transaction.transdate = $scope.transaction.effdate;
-        $scope.transaction.postdate = $scope.transaction.effdate;
-        $scope.transaction.deleted = false;
-        $scope.transaction.split = false;
-        var transactions = [$scope.transaction];
+    vm.save = function(){
+        vm.transaction.transdate = vm.transaction.effdate;
+        vm.transaction.postdate = vm.transaction.effdate;
+        vm.transaction.deleted = false;
+        vm.transaction.split = false;
+        var transactions = [vm.transaction];
         transactionService.addTransaction(transactions
             ).then(function (result) {
                 ngToast.success({
                     content: 'Transaction saved'
                 });
-                $modalInstance.close($scope.transaction);
+                $modalInstance.close(vm.transaction);
             }, function (result) {
                 ngToast.danger({
                     content: 'Error saving transaction: ' + result.data
@@ -53,24 +55,24 @@ angular.module("app").controller('NewTransaction', ['$scope', '$modalInstance', 
             });
     };
     
-    $scope.cancel = function () {
+    vm.cancel = function () {
         $modalInstance.dismiss('cancel');
     };
     
     // calendar options
-    $scope.dateOptions = {
+    vm.dateOptions = {
         formatYear: 'yy',
-        startingDay: 1
+        startingDay: 0
     };
     
-    $scope.format = 'M/d/yyyy';
+    vm.format = 'M/d/yyyy';
     
-    $scope.popup1 = {
+    vm.popup1 = {
         opened: false
     };
     
-    $scope.open1 = function() {
-        $scope.popup1.opened = true;
+    vm.open1 = function() {
+        vm.popup1.opened = true;
     };
     // end calendar options
 }]);

@@ -28,16 +28,16 @@ THE SOFTWARE.
                 <strong>Budget Year</strong>
             </div>
             <div class="col-sm-2">
-                <select class="form-control" ng-model="selectedYear"
-                    ng-options="year for year in transYears"
-                    ng-change="loadBudget()">
+                <select class="form-control" ng-model="vm.selectedYear"
+                    ng-options="year for year in vm.transYears"
+                    ng-change="vm.loadBudget()">
                 </select>
             </div>
             <div class="col-sm-2">
-                <button class="btn btn-default" ng-click="save()">Save</button>
+                <button class="btn btn-default" ng-click="vm.save()">Save</button>
             </div>
         </div>
-        <div class="row" ng-repeat="tempBudgetCategory in model">
+        <div class="row" ng-repeat="tempBudgetCategory in vm.model">
             <div class="col-sm-2">
                 <span ng-bind="tempBudgetCategory.name"></span>
             </div>

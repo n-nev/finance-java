@@ -22,28 +22,30 @@
  * THE SOFTWARE.
  */
 
-angular.module("app").controller('NewEditCategory', ['$scope', '$modalInstance', 'category', 'ngToast', 'categoryService',
-    function ($scope, $modalInstance, category, ngToast, categoryService) {
+angular.module("app").controller('NewEditCategory', ['$modalInstance', 'category', 'ngToast', 'categoryService',
+    function ($modalInstance, category, ngToast, categoryService) {
+        
+    var vm = this;
     
     if(category) {
-        $scope.category = category;
+        vm.category = category;
     } else {
-        $scope.category = { name: "", extra: false, sort_id: 0};
+        vm.category = { name: "", extra: false, sort_id: 0};
     }
     
-    $scope.ok = function () {
-        $categoryService.updateCategory($scope.category).then(function (result) {
-                ngToast.success({
-                    content: 'Category saved'
-                });
-                $modalInstance.close($scope.category);
-            }, function (result) {
-                ngToast.danger({
-                    content: 'There was a problem saving the category: ' + result.data
-                });
+    vm.save = function () {
+        categoryService.updateCategory(vm.category).then(function (result) {
+            ngToast.success({
+                content: 'Category saved'
             });
+            $modalInstance.close(vm.category);
+        }, function (result) {
+            ngToast.danger({
+                content: 'There was a problem saving the category: ' + result.data
+            });
+        });
     };
-    $scope.cancel = function () {
+    vm.cancel = function () {
         $modalInstance.dismiss('cancel');
     };
 }]);

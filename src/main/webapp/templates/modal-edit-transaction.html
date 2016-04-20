@@ -30,26 +30,27 @@ THE SOFTWARE.
     </head>
     <body>
         <div class="modal-header">
-            <h3 class="modal-title">Edit Transaction</h3>
+            <button type="button" class="close" aria-label="Close" ng-click="vm.cancel()"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">Edit Transaction</h4>
         </div>
         <form name="myform" class="form-horizontal" novalidate>
             <div class="modal-body">
                 <div class="row">
                     <div class="col-sm-3">
                         <strong>Transaction Date</strong><br />
-                        {{transaction.transdate | date:'M/d/yyyy'}}
+                        {{vm.transaction.transdate | date:'M/d/yyyy'}}
                     </div>
                     <div class="col-sm-2">
                         <strong>Amount</strong><br />
-                        {{transaction.amount | currency}}
+                        {{vm.transaction.amount | currency}}
                     </div>
                     <div class="col-sm-5">
                         <strong>Description</strong><br />
-                        {{transaction.vendor | limitTo:20}}
+                        {{vm.transaction.vendor | limitTo:20}}
                     </div>
                     <div class="col-sm-2">
                         <strong>Account</strong><br />
-                        {{transaction.account.name}}
+                        {{vm.transaction.account.name}}
                     </div>
                 </div>
                 <div class="row">
@@ -59,9 +60,9 @@ THE SOFTWARE.
                     <label for="transactioneffdate" class="col-sm-3 control-label">Effective Date</label>
                     <div class="col-sm-5">
                         <p class="input-group">
-                            <input type="text" class="form-control" uib-datepicker-popup="{{format}}" ng-model="transaction.effdate" is-open="popup1.opened" datepicker-options="dateOptions" ng-required="true" close-text="Close" />
+                            <input type="text" id="transactioneffdate" class="form-control" uib-datepicker-popup="{{vm.format}}" ng-model="vm.transaction.effdate" is-open="vm.popup1.opened" datepicker-options="vm.dateOptions" ng-required="true" close-text="Close" />
                             <span class="input-group-btn">
-                                <button type="button" class="btn btn-default" ng-click="open1()"><i class="glyphicon glyphicon-calendar"></i></button>
+                                <button type="button" class="btn btn-default" ng-click="vm.open1()"><i class="glyphicon glyphicon-calendar"></i></button>
                             </span>
                         </p>
                     </div>
@@ -71,7 +72,7 @@ THE SOFTWARE.
                 <div class="form-group">
                     <label for="transactiondesc" class="col-sm-3 control-label">For</label>
                     <div class="col-sm-5">
-                        <input type="text" class="form-control" ng-model="transaction.description" />
+                        <input type="text" id="transactiondesc" class="form-control" ng-model="vm.transaction.description" />
                     </div>
                     <div class="col-sm-4">
                     </div>
@@ -79,9 +80,9 @@ THE SOFTWARE.
                 <div class="form-group">
                     <label for="categoryselect" class="col-sm-3 control-label">Category</label>
                     <div class="col-sm-5">
-                        <select id="categoryselect" class="form-control" ng-model="transaction.category"
-                            ng-options="category as category.name for category in categories"
-                            ng-init="init()">
+                        <select id="categoryselect" class="form-control" ng-model="vm.transaction.category"
+                            ng-options="category as category.name for category in vm.categories"
+                            ng-init="vm.init()">
                         </select>
                     </div>
                     <div class="col-sm-4">
@@ -90,9 +91,9 @@ THE SOFTWARE.
             </div>
         </form>
         <div class="modal-footer">
-            <button class="btn btn-primary" type="button" ng-click="save()">Save</button>
-            <button class="btn btn-info" type="button" ng-click="split()" ng-disabled="transaction.splitId > 0">Split</button>
-            <button class="btn btn-warning" type="button" ng-click="cancel()">Cancel</button>
+            <button class="btn btn-primary" type="button" ng-click="vm.save()">Save</button>
+            <button class="btn btn-info" type="button" ng-click="vm.split()" ng-disabled="vm.transaction.splitId > 0">Split</button>
+            <button class="btn btn-warning" type="button" ng-click="vm.cancel()">Cancel</button>
         </div>
     </body>
 </html>

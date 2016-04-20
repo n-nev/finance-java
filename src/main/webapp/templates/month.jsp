@@ -4,15 +4,15 @@
             <div class="col-sm-12">
                 <form class="form-inline" style="margin-bottom: 1em;">
                     <div class="form-group">
-                        <select class="form-control" ng-model="selectedMonth"
-                            ng-options="month as month.key for month in months"
-                            ng-change="loadTransactions()">
+                        <select class="form-control" ng-model="vm.selectedMonth"
+                            ng-options="month as month.key for month in vm.months"
+                            ng-change="vm.loadTransactions()">
                         </select>
                     </div>
                     <div class="form-group">
-                        <select class="form-control" ng-model="selectedYear"
-                            ng-options="year for year in transYears"
-                            ng-change="loadTransactions()">
+                        <select class="form-control" ng-model="vm.selectedYear"
+                            ng-options="year for year in vm.transYears"
+                            ng-change="vm.loadTransactions()">
                         </select>
                     </div>
                 </form>
@@ -36,9 +36,9 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-sm-12" ng-repeat="category in categories | filter: {extra : false} : true">
+            <div class="col-sm-12" ng-repeat="category in vm.categories | filter: {extra : false} : true">
                 <div class="finance-category"><span ng-bind="category.name"></span></div>
-                <div class="row" ng-repeat="transaction in transactions | filter: {category: {uid: category.uid}} | filter: {deleted : false} : true | orderBy:'effdate'">
+                <div class="row" ng-repeat="transaction in vm.transactions | filter: {category: {uid: category.uid}} | filter: {deleted : false} : true | orderBy:'effdate'">
                     <div class="col-sm-2">
                         {{transaction.effdate | date:'MM/dd/yyyy'}}
                     </div>
@@ -46,7 +46,7 @@
                         <%
                             if (request.isUserInRole("financeadmin")) {
                         %>
-                            <a href ng-click="editTransaction(transaction)">{{transaction.amount | currency}}</a>
+                            <a href ng-click="vm.editTransaction(transaction)">{{transaction.amount | currency}}</a>
                         <% } else { %>
                             {{transaction.amount | currency}}
                         <% } %>
@@ -58,7 +58,7 @@
                         <%
                             if (request.isUserInRole("financeadmin")) {
                         %>
-                            <a href ng-click="editTransaction(transaction)">{{transaction.description}}</a>
+                            <a href ng-click="vm.editTransaction(transaction)">{{transaction.description}}</a>
                         <% } else { %>
                             {{transaction.description}}
                         <% } %>
@@ -72,7 +72,7 @@
                         Total
                     </div>
                     <div class="col-sm-1 budget-amount">
-                        {{getTotal(category.uid) | currency}}
+                        {{vm.getTotal(category.uid) | currency}}
                     </div>
                 </div>
             </div>

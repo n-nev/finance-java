@@ -27,9 +27,9 @@ THE SOFTWARE.
             <div class="col-sm-12">
                 <form class="form-inline" style="margin-bottom: 1em;">
                     <div class="form-group">
-                        <select class="form-control" ng-model="selectedYear"
-                            ng-options="year for year in transYears"
-                            ng-change="loadYear()">
+                        <select class="form-control" ng-model="vm.selectedYear"
+                            ng-options="year for year in vm.transYears"
+                            ng-change="vm.loadYear()">
                         </select>
                     </div>
                 </form>
@@ -40,18 +40,18 @@ THE SOFTWARE.
                 <table class="table table-bordered yearlyBudget">
                     <colgroup>
                         <col>
-                        <col ng-class="selectedMonth.val === 1 ? 'highlight' : ''">
-                        <col ng-class="selectedMonth.val === 2 ? 'highlight' : ''">
-                        <col ng-class="selectedMonth.val === 3 ? 'highlight' : ''">
-                        <col ng-class="selectedMonth.val === 4 ? 'highlight' : ''">
-                        <col ng-class="selectedMonth.val === 5 ? 'highlight' : ''">
-                        <col ng-class="selectedMonth.val === 6 ? 'highlight' : ''">
-                        <col ng-class="selectedMonth.val === 7 ? 'highlight' : ''">
-                        <col ng-class="selectedMonth.val === 8 ? 'highlight' : ''">
-                        <col ng-class="selectedMonth.val === 9 ? 'highlight' : ''">
-                        <col ng-class="selectedMonth.val === 10 ? 'highlight' : ''">
-                        <col ng-class="selectedMonth.val === 11 ? 'highlight' : ''">
-                        <col ng-class="selectedMonth.val === 12 ? 'highlight' : ''">
+                        <col ng-class="vm.selectedMonth.val === 1 ? 'highlight' : ''">
+                        <col ng-class="vm.selectedMonth.val === 2 ? 'highlight' : ''">
+                        <col ng-class="vm.selectedMonth.val === 3 ? 'highlight' : ''">
+                        <col ng-class="vm.selectedMonth.val === 4 ? 'highlight' : ''">
+                        <col ng-class="vm.selectedMonth.val === 5 ? 'highlight' : ''">
+                        <col ng-class="vm.selectedMonth.val === 6 ? 'highlight' : ''">
+                        <col ng-class="vm.selectedMonth.val === 7 ? 'highlight' : ''">
+                        <col ng-class="vm.selectedMonth.val === 8 ? 'highlight' : ''">
+                        <col ng-class="vm.selectedMonth.val === 9 ? 'highlight' : ''">
+                        <col ng-class="vm.selectedMonth.val === 10 ? 'highlight' : ''">
+                        <col ng-class="vm.selectedMonth.val === 11 ? 'highlight' : ''">
+                        <col ng-class="vm.selectedMonth.val === 12 ? 'highlight' : ''">
                         <col>
                         <col>
                         <col>
@@ -71,47 +71,47 @@ THE SOFTWARE.
                         <th>Nov</th>
                         <th>Dec</th>
                         <th>Budgeted</th>
-                        <th>Remain <select ng-model="selectedMonth"
-                                ng-options="month as month.key for month in months"
-                                ng-change="budgetMonth()">
+                        <th>Remain <select ng-model="vm.selectedMonth"
+                                ng-options="month as month.key for month in vm.months"
+                                ng-change="vm.budgetMonth()">
                             </select>
                         </th>
                         <th>Category</th>
                     </tr>
-                    <tr ng-repeat="category in ::categories | orderBy: sortId | filter: {extra : false} : true">
+                    <tr ng-repeat="category in ::vm.categories | orderBy: sortId | filter: {extra : false} : true">
                         <td>{{category.name}}</td>
-                        <td><span ng-repeat="month in yearlyTransactions | filter: {monthId: 1} : true"><span ng-repeat="cat in month.categories | filter: {uid: category.uid} : true">{{cat.amount | currency}}</span></span></td>
-                        <td><span ng-repeat="month in yearlyTransactions | filter: {monthId: 2} : true"><span ng-repeat="cat in month.categories | filter: {uid: category.uid} : true">{{cat.amount | currency}}</span></span></td>
-                        <td><span ng-repeat="month in yearlyTransactions | filter: {monthId: 3} : true"><span ng-repeat="cat in month.categories | filter: {uid: category.uid} : true">{{cat.amount | currency}}</span></span></td>
-                        <td><span ng-repeat="month in yearlyTransactions | filter: {monthId: 4} : true"><span ng-repeat="cat in month.categories | filter: {uid: category.uid} : true">{{cat.amount | currency}}</span></span></td>
-                        <td><span ng-repeat="month in yearlyTransactions | filter: {monthId: 5} : true"><span ng-repeat="cat in month.categories | filter: {uid: category.uid} : true">{{cat.amount | currency}}</span></span></td>
-                        <td><span ng-repeat="month in yearlyTransactions | filter: {monthId: 6} : true"><span ng-repeat="cat in month.categories | filter: {uid: category.uid} : true">{{cat.amount | currency}}</span></span></td>
-                        <td><span ng-repeat="month in yearlyTransactions | filter: {monthId: 7} : true"><span ng-repeat="cat in month.categories | filter: {uid: category.uid} : true">{{cat.amount | currency}}</span></span></td>
-                        <td><span ng-repeat="month in yearlyTransactions | filter: {monthId: 8} : true"><span ng-repeat="cat in month.categories | filter: {uid: category.uid} : true">{{cat.amount | currency}}</span></span></td>
-                        <td><span ng-repeat="month in yearlyTransactions | filter: {monthId: 9} : true"><span ng-repeat="cat in month.categories | filter: {uid: category.uid} : true">{{cat.amount | currency}}</span></span></td>
-                        <td><span ng-repeat="month in yearlyTransactions | filter: {monthId: 10} : true"><span ng-repeat="cat in month.categories | filter: {uid: category.uid} : true">{{cat.amount | currency}}</span></span></td>
-                        <td><span ng-repeat="month in yearlyTransactions | filter: {monthId: 11} : true"><span ng-repeat="cat in month.categories | filter: {uid: category.uid} : true">{{cat.amount | currency}}</span></span></td>
-                        <td><span ng-repeat="month in yearlyTransactions | filter: {monthId: 12} : true"><span ng-repeat="cat in month.categories | filter: {uid: category.uid} : true">{{cat.amount | currency}}</span></span></td>
-                        <td><span ng-repeat="budgetcat in budget.budgetCategory"><span ng-if="budgetcat.categoryId === category.uid">{{budgetcat.amount | currency}}</span></span></td>
-                        <td><span ng-repeat="diff in budgetDifference"><span ng-if="diff.catid === category.uid">{{diff.difference | currency}}</span></span></td>
+                        <td><span ng-repeat="month in vm.yearlyTransactions | filter: {monthId: 1} : true"><span ng-repeat="cat in month.categories | filter: {uid: category.uid} : true">{{cat.amount | currency}}</span></span></td>
+                        <td><span ng-repeat="month in vm.yearlyTransactions | filter: {monthId: 2} : true"><span ng-repeat="cat in month.categories | filter: {uid: category.uid} : true">{{cat.amount | currency}}</span></span></td>
+                        <td><span ng-repeat="month in vm.yearlyTransactions | filter: {monthId: 3} : true"><span ng-repeat="cat in month.categories | filter: {uid: category.uid} : true">{{cat.amount | currency}}</span></span></td>
+                        <td><span ng-repeat="month in vm.yearlyTransactions | filter: {monthId: 4} : true"><span ng-repeat="cat in month.categories | filter: {uid: category.uid} : true">{{cat.amount | currency}}</span></span></td>
+                        <td><span ng-repeat="month in vm.yearlyTransactions | filter: {monthId: 5} : true"><span ng-repeat="cat in month.categories | filter: {uid: category.uid} : true">{{cat.amount | currency}}</span></span></td>
+                        <td><span ng-repeat="month in vm.yearlyTransactions | filter: {monthId: 6} : true"><span ng-repeat="cat in month.categories | filter: {uid: category.uid} : true">{{cat.amount | currency}}</span></span></td>
+                        <td><span ng-repeat="month in vm.yearlyTransactions | filter: {monthId: 7} : true"><span ng-repeat="cat in month.categories | filter: {uid: category.uid} : true">{{cat.amount | currency}}</span></span></td>
+                        <td><span ng-repeat="month in vm.yearlyTransactions | filter: {monthId: 8} : true"><span ng-repeat="cat in month.categories | filter: {uid: category.uid} : true">{{cat.amount | currency}}</span></span></td>
+                        <td><span ng-repeat="month in vm.yearlyTransactions | filter: {monthId: 9} : true"><span ng-repeat="cat in month.categories | filter: {uid: category.uid} : true">{{cat.amount | currency}}</span></span></td>
+                        <td><span ng-repeat="month in vm.yearlyTransactions | filter: {monthId: 10} : true"><span ng-repeat="cat in month.categories | filter: {uid: category.uid} : true">{{cat.amount | currency}}</span></span></td>
+                        <td><span ng-repeat="month in vm.yearlyTransactions | filter: {monthId: 11} : true"><span ng-repeat="cat in month.categories | filter: {uid: category.uid} : true">{{cat.amount | currency}}</span></span></td>
+                        <td><span ng-repeat="month in vm.yearlyTransactions | filter: {monthId: 12} : true"><span ng-repeat="cat in month.categories | filter: {uid: category.uid} : true">{{cat.amount | currency}}</span></span></td>
+                        <td><span ng-repeat="budgetcat in vm.budget.budgetCategory"><span ng-if="budgetcat.categoryId === category.uid">{{budgetcat.amount | currency}}</span></span></td>
+                        <td><span ng-repeat="diff in vm.budgetDifference"><span ng-if="diff.catid === category.uid">{{diff.difference | currency}}</span></span></td>
                         <td>{{category.name}}</td>
                     </tr>
                     <tr>
                         <td><strong>Total</strong></td>
-                        <td><strong><span ng-bind="monthlyTotal(1) | currency"></span></strong></td>
-                        <td><strong><span ng-bind="monthlyTotal(2) | currency"></span></strong></td>
-                        <td><strong><span ng-bind="monthlyTotal(3) | currency"></span></strong></td>
-                        <td><strong><span ng-bind="monthlyTotal(4) | currency"></span></strong></td>
-                        <td><strong><span ng-bind="monthlyTotal(5) | currency"></span></strong></td>
-                        <td><strong><span ng-bind="monthlyTotal(6) | currency"></span></strong></td>
-                        <td><strong><span ng-bind="monthlyTotal(7) | currency"></span></strong></td>
-                        <td><strong><span ng-bind="monthlyTotal(8) | currency"></span></strong></td>
-                        <td><strong><span ng-bind="monthlyTotal(9) | currency"></span></strong></td>
-                        <td><strong><span ng-bind="monthlyTotal(10) | currency"></span></strong></td>
-                        <td><strong><span ng-bind="monthlyTotal(11) | currency"></span></strong></td>
-                        <td><strong><span ng-bind="monthlyTotal(12) | currency"></span></strong></td>
-                        <td><strong ng-bind="budgetTotal | currency"></strong></td>
-                        <td><strong ng-bind="currentRemaining | currency"></strong></td>
+                        <td><strong><span ng-bind="vm.monthlyTotal(1) | currency"></span></strong></td>
+                        <td><strong><span ng-bind="vm.monthlyTotal(2) | currency"></span></strong></td>
+                        <td><strong><span ng-bind="vm.monthlyTotal(3) | currency"></span></strong></td>
+                        <td><strong><span ng-bind="vm.monthlyTotal(4) | currency"></span></strong></td>
+                        <td><strong><span ng-bind="vm.monthlyTotal(5) | currency"></span></strong></td>
+                        <td><strong><span ng-bind="vm.monthlyTotal(6) | currency"></span></strong></td>
+                        <td><strong><span ng-bind="vm.monthlyTotal(7) | currency"></span></strong></td>
+                        <td><strong><span ng-bind="vm.monthlyTotal(8) | currency"></span></strong></td>
+                        <td><strong><span ng-bind="vm.monthlyTotal(9) | currency"></span></strong></td>
+                        <td><strong><span ng-bind="vm.monthlyTotal(10) | currency"></span></strong></td>
+                        <td><strong><span ng-bind="vm.monthlyTotal(11) | currency"></span></strong></td>
+                        <td><strong><span ng-bind="vm.monthlyTotal(12) | currency"></span></strong></td>
+                        <td><strong ng-bind="vm.budgetTotal | currency"></strong></td>
+                        <td><strong ng-bind="vm.currentRemaining | currency"></strong></td>
                         <td><strong>Total</strong></td>
                     </tr>
                 </table>

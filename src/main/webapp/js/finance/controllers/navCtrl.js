@@ -22,17 +22,18 @@
  * THE SOFTWARE.
  */
 
-angular.module("app").controller("NavController", ['$scope', '$location', '$uibModal',
-    function ($scope, $location, $uibModal) {
+angular.module("app").controller("NavController", ['$location', '$uibModal',
+    function ($location, $uibModal) {
     
-    $scope.$location = $location;
+    var vm = this;
+    vm.$location = $location;
 
-    $scope.newTransaction = function () {
-        var size;
+    vm.newTransaction = function () {
         var modalInstance = $uibModal.open({
             templateUrl: 'templates/modal-new-transaction.html',
             controller: 'NewTransaction',
-            size: size
+            controllerAs: 'vm',
+            size: 'md'
         });
         modalInstance.result.then(function (transaction) {
             // the page needs to be reloaded because we could be on any page
