@@ -22,16 +22,11 @@
  * THE SOFTWARE.
  */
 
-angular.module("app").controller('NewEditCategory', ['$modalInstance', 'category', 'ngToast', 'categoryService',
+angular.module("app").controller('EditCategory', ['$modalInstance', 'category', 'ngToast', 'categoryService',
     function ($modalInstance, category, ngToast, categoryService) {
         
     var vm = this;
-    
-    if(category) {
-        vm.category = category;
-    } else {
-        vm.category = { name: "", extra: false, sort_id: 0};
-    }
+    vm.category = category;
     
     vm.save = function () {
         categoryService.updateCategory(vm.category).then(function (result) {

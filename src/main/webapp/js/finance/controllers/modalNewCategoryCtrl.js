@@ -22,19 +22,25 @@
  * THE SOFTWARE.
  */
 
-angular.module('app').service('categoryService', ['$http', function($http) {
+angular.module("app").controller('NewCategory', ['$modalInstance', 'ngToast', 'categoryService',
+    function ($modalInstance, ngToast, categoryService) {
         
-    this.updateCategory = function(category) {
-        return $http.put('webapi/categories/category', category);
+    var vm = this;
+    vm.category = { name: "", extra: false, sort_id: 0};
+    
+    vm.save = function () {
+        categoryService.addCategory(vm.category).then(function (result) {
+            ngToast.success({
+                content: 'Category saved'
+            });
+            $modalInstance.close(result.data);
+        }, function (result) {
+            ngToast.danger({
+                content: 'There was a problem saving the category: ' + result.data
+            });
+        });
     };
-    
-    this.addCategory = function(category) {
-        return $http.post('webapi/categories/category', category);
+    vm.cancel = function () {
+        $modalInstance.dismiss('cancel');
     };
-    
-    this.saveCategories = function(categories) {
-        return $http.put('webapi/categories', categories);
-    };
-    
-    
 }]);

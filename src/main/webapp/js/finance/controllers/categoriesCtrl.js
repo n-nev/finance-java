@@ -31,25 +31,22 @@ angular.module("app").controller("CategoriesController", ['$uibModal', 'ngToast'
 
     vm.newCategory = function () {
         var modalInstance = $uibModal.open({
-            templateUrl: 'templates/modal-new-edit-category.html',
-            controller: 'NewEditCategory',
+            templateUrl: 'templates/modal-new-category.html',
+            controller: 'NewCategory',
             controllerAs: 'vm',
-            size: 'sm',
-            resolve: {
-                category: function () {
-                    return null;
-                }
-            }
+            size: 'sm'
         });
         modalInstance.result.then(function (category) {
+            console.log(category);
             vm.categories.push(category);
+            appSettings.categories = vm.categories;
         });
     };
     
     vm.editCategory = function (category) {
         var modalInstance = $uibModal.open({
-            templateUrl: 'templates/modal-new-edit-category.html',
-            controller: 'NewEditCategory',
+            templateUrl: 'templates/modal-edit-category.html',
+            controller: 'EditCategory',
             controllerAs: 'vm',
             size: 'sm',
             resolve: {
@@ -66,6 +63,7 @@ angular.module("app").controller("CategoriesController", ['$uibModal', 'ngToast'
                         break;
                     }
                 }
+                appSettings.categories = vm.categories;
             }
         });
     };
@@ -77,6 +75,8 @@ angular.module("app").controller("CategoriesController", ['$uibModal', 'ngToast'
             vm.categories[i].sortId = i + 1;
         }
         categoryService.saveCategories(vm.categories).then(function (result) {
+            // save categories back to service
+            appSettings.categories = vm.categories;
             ngToast.success({
                 content: 'Categories saved'
             });

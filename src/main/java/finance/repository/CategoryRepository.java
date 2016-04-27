@@ -36,7 +36,7 @@ public class CategoryRepository {
      * 
      * @param category the category to add 
      */
-    public void addCategory(Category category) {
+    public Category addCategory(Category category) {
         Session session = HibernateUtil.getSessionFactory().getCurrentSession();
         try {
             org.hibernate.Transaction transaction = session.beginTransaction();
@@ -48,6 +48,7 @@ public class CategoryRepository {
         } catch (Exception e) {
             throw e;
         }
+        return category;
     }
     
     /**
@@ -60,27 +61,6 @@ public class CategoryRepository {
         try {
             org.hibernate.Transaction transaction = session.beginTransaction();
             session.update(category);
-            transaction.commit();
-        } catch (Exception e) {
-            throw e;
-        }
-    }
-    
-    /**
-     * Save or update a category in the repository. If the category doesn't have
-     * a sort ID or if the sort ID is 0, it will be assigned one automatically.
-     * 
-     * @param category the category to save or update
-     */
-    public void saveOrUpdateCategory(Category category) {
-        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
-        try {
-            org.hibernate.Transaction transaction = session.beginTransaction();
-            if (category.getSortId() == 0) {
-                int max = (int) session.createSQLQuery("SELECT MAX(`sort_id`) AS max FROM category").addScalar("max").uniqueResult();
-                category.setSortId(max + 1);
-            }
-            session.saveOrUpdate(category);
             transaction.commit();
         } catch (Exception e) {
             throw e;

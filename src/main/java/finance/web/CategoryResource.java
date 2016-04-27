@@ -49,6 +49,7 @@ public class CategoryResource {
      * Method handling HTTP GET requests. The returned object will be sent
      * to the client as "application/json" media type.
      *
+     * @param categories categories to save or update
      * @return String that will be returned as a application/json response.
      */
     @PUT
@@ -69,7 +70,6 @@ public class CategoryResource {
                 return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(myError).build();
             }
         }
-		
         return Response.ok().build();
     }
     
@@ -80,10 +80,10 @@ public class CategoryResource {
     public Response addCategory(Category category) {
 		
         ErrorMessage myError = new ErrorMessage();
-        
+        Category returnCategory = null;
         try {
             CategoryRepository categoryRepository = new CategoryRepository();
-            categoryRepository.addCategory(category);
+            returnCategory = categoryRepository.addCategory(category);
         }
         catch (Exception ex)
         {
@@ -91,7 +91,7 @@ public class CategoryResource {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(myError).build();
         }
 		
-        return Response.ok().build();
+        return Response.ok(returnCategory).build();
     }
     
     @Path("category")
@@ -101,10 +101,9 @@ public class CategoryResource {
     public Response updateCategory(Category category) {
 		
         ErrorMessage myError = new ErrorMessage();
-        
         try {
             CategoryRepository categoryRepository = new CategoryRepository();
-            categoryRepository.saveOrUpdateCategory(category);
+            categoryRepository.updateCategory(category);
         }
         catch (Exception ex)
         {
