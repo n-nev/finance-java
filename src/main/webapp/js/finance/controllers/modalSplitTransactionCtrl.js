@@ -31,29 +31,14 @@ angular.module("app").controller('SplitTransaction', ['$scope', '$modalInstance'
     vm.transaction.deleted = true;
     vm.categories = categories;
     vm.model = {};
-    vm.model.taxes = false;
-    vm.model.taxAmount = 0;
-    vm.model.taxSplitAmount = 0;
-    vm.model.taxRates = [
-        {
-            label: '6.85%',
-            rate: .0685
-        }, {
-            label: '3.00%',
-            rate: .03
-        }
-    ];
-    vm.model.selectedTaxRate = vm.model.taxRates[0];
     
-    vm.calculateTax = function() {
-        if (vm.model.taxAmount) {
-            vm.model.taxSplitAmount = (vm.model.taxAmount / vm.model.selectedTaxRate.rate) + vm.model.taxAmount;
-            vm.splitTransactions[0].amount = vm.model.taxSplitAmount;
-            vm.splitTransactions[1].amount = vm.transaction.amount - vm.model.taxSplitAmount;
+    vm.calculateDifference = function() {
+        if (isNaN(vm.splitTransactions[0].amount)) {
+            vm.splitTransactions[1].amount = vm.transaction.amount;
+        } else {
+            vm.splitTransactions[1].amount = (vm.transaction.amount - vm.splitTransactions[0].amount);
         }
-    }
-    
-    $scope.$watch('vm.model.taxAmount', vm.calculateTax);
+    };
     
     vm.splitTransactions = [
         {
@@ -90,6 +75,8 @@ angular.module("app").controller('SplitTransaction', ['$scope', '$modalInstance'
             }
         }
     });
+    
+    $scope.$watch('vm.splitTransactions[0].amount', vm.calculateDifference);
 
     vm.save = function () {
         var transactions = angular.copy(vm.splitTransactions);

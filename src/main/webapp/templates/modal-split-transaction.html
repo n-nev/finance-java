@@ -72,29 +72,6 @@ THE SOFTWARE.
                         </td>
                     </tr>
                 </table>
-                <div class="row">
-                    <div class="col-xs-12">
-                        <label>
-                            <input type="checkbox" ng-model="vm.model.taxes" /> Split by taxes
-                        </label>
-                    </div>
-                </div>
-                <div class="row" ng-if="vm.model.taxes">
-                    <div class="col-xs-4">
-                        Rate: <select id="rateselect" class="form-control" ng-model="vm.model.selectedTaxRate"
-                                ng-options="rate as rate.label for rate in vm.model.taxRates"
-                                ng-change="vm.calculateTax()">
-                            </select>
-                    </div>
-                    <div class="col-xs-4">
-                        Tax Amount:
-                        <input type="text" class="form-control" ng-model="vm.model.taxAmount" ng-currency />
-                    </div>
-                    <div class="col-xs-4">
-                        Calculated Amount:<br />
-                        {{vm.model.taxSplitAmount | currency}}
-                    </div>
-                </div>
             </div>
         </form>
         <div class="modal-footer">

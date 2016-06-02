@@ -68,6 +68,7 @@ angular.module("app").controller("MiscController", ['$uibModal', 'appSettings', 
         var modalInstance = $uibModal.open({
             templateUrl: 'templates/modal-edit-transaction.html',
             controller: 'EditTransaction',
+            controllerAs: 'vm',
             size: 'md',
             resolve: {
                 transaction: function () {
