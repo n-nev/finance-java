@@ -4,10 +4,10 @@
             <div class="form-inline" style="margin-bottom: 1em;">
                 <div class="form-group">
                     <button class="btn btn-primary" ng-click="vm.save()" ng-disabled="!vm.parsed">Save</button>
-                    <button class="btn btn-default" ng-click="vm.uploadFile()" ng-disabled="!vm.myFile">Parse File</button>
-                </div>
-                <div class="form-group">
-                    <input type="file" file-model="vm.myFile"/>
+                    <label class="btn btn-default btn-file">Browse
+                        <input type="file" file-model="vm.myFile" style="display: none;" />
+                    </label>
+                    <span ng-bind="vm.myFile.name"></span>
                 </div>
             </div>
         </div>

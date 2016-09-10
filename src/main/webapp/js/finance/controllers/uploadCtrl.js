@@ -22,11 +22,18 @@
  * THE SOFTWARE.
  */
 
-angular.module('app').controller('UploadController', ['ngToast', 'appSettings', 'transactionService', 
-    function(ngToast, appSettings, transactionService){
+angular.module('app').controller('UploadController', ['$scope', 'ngToast', 'appSettings', 'transactionService', 
+    function($scope, ngToast, appSettings, transactionService){
         
     var vm = this;
     
+    vm.myFile = null;
+    $scope.$watch('vm.myFile', function() {
+        if (vm.myFile)
+        {
+            vm.uploadFile();
+        }
+    });
     vm.accounts = appSettings.accounts;
     vm.categories = appSettings.categories;
     for (var i = 0; i < vm.categories.length; i++) {
